@@ -98,10 +98,36 @@ You can later retrieve the vaccine by `id` by calling the following endpoint:
 curl https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/vaccines/BCG_M_Microgen
 ```
 
-Which should result in the following response:
+Or get complete list of id vaccines by calling:
 
 ```bash
-{"id":"BCG_M_Microgen","routingGuid":"c4592056-f001-476c-9fcf-8f64bc5ec53b","registrationId":"1449366","registrationNumber":"ЛС-001143","registrationDate":"05.08.2011","renewalDate":"15.10.2019","circulationPeriod":"Бессрочный","manufacturerCountry":"Россия","tradeName":"Вакцина туберкулезная для щадящей первичной иммунизации (БЦЖ-М)","internationalName":"Вакцина для профилактики туберкулеза","data":"{\"Sources\":[{\"SourceName\":\"GRLS\",\"SourceUrl\":\"InstrImgHack\",\"Instructions\":[{\"Images\":[{\"Url\":\"\\\\InstrImg\\\\0001449366\\\\ЛС-001143[2017]_0.pdf\",\"Label\":\"Изм. № 0, ЛС-001143, 2017\"}],\"FolderPath\":null,\"Label\":\"ЛС-001143, 2017\"},{\"Images\":[{\"Url\":\"\\\\InstrImg\\\\0001449366\\\\ЛС-001143[2018]_1.pdf\",\"Label\":\"Изм. № 1, ЛС-001143, 2018\"}],\"FolderPath\":null,\"Label\":\"ЛС-001143, 2018\"},{\"Images\":[{\"Url\":\"\\\\InstrImg\\\\0001449366\\\\ЛС-001143[2019]_2.pdf\",\"Label\":\"Изм. № 2, ЛС-001143, 2019\"},{\"Url\":\"\\\\InstrImg\\\\0001449366\\\\ЛС-001143[2019]_3.pdf\",\"Label\":\"Изм. № 3, ЛС-001143, 2019\"}],\"FolderPath\":null,\"Label\":\"ЛС-001143, 2019\"}]}]}","updateDate":1630271592930}
+curl https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/GetVaccinesList
+```
+
+Also other methods avaliable:
+
+Get Infections List:
+
+```bash
+curl https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/GetInfectionsList
+```
+
+Add infection:
+
+```bash
+curl --request POST 'https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/UpsertInfection' --header 'Content-Type: application/json' --data-raw '{ "id": "test1" }'
+```
+
+Get Restrictions List:
+
+```bash
+curl https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/GetRestrictionsList
+```
+
+Add restriction:
+
+```bash
+curl --request POST 'https://4vw5xzykw9.execute-api.us-east-1.amazonaws.com/dev/UpsertRestriction' --header 'Content-Type: application/json' --data-raw '{ "id": "test1" }'
 ```
 
 If you try to retrieve vaccine that does not exist, you should receive the following response:

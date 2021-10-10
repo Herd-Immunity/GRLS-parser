@@ -5,11 +5,16 @@ const serverless = require("serverless-http");
 const app = express();
 
 const VACCINES_TABLE = process.env.VACCINES_TABLE;
+const INFECTIONS_TABLE = process.env.INFECTIONS_TABLE;
+const RESTRICTIONS_TABLE = process.env.RESTRICTIONS_TABLE;
+
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
 app.use(express.json());
 
-app.get("/vaccines", async function (req, res) {
+/* VACCINES */
+
+app.get("/GetVaccinesList", async function (req, res) {
   const params = {
     TableName: VACCINES_TABLE,
     AttributesToGet: ["id", "routingGuid"],
@@ -32,7 +37,32 @@ app.get("/vaccines", async function (req, res) {
   }
 });
 
-app.get("/vaccines/:id", async function (req, res) {
+app.post("/UpsertVaccine", async function (req, res) {
+  const { id, routingGuid } = req.body;
+  if (typeof id !== "string") {
+    res.status(400).json({ error: '"id" must be a string' });
+  } else if (typeof routingGuid !== "string") {
+    res.status(400).json({ error: '"routingGuid" must be a string' });
+  }
+
+  const params = {
+    TableName: VACCINES_TABLE,
+    Item: {
+      ...req.body,
+      updateDate: Date.now(),
+    },
+  };
+
+  try {
+    await dynamoDbClient.put(params).promise();
+    res.json(params.Item);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Could not create vaccine" });
+  }
+});
+
+app.get("/GetVaccineById/:id", async function (req, res) {
   const params = {
     TableName: VACCINES_TABLE,
     Key: {
@@ -55,40 +85,85 @@ app.get("/vaccines/:id", async function (req, res) {
   }
 });
 
-app.post("/vaccines", async function (req, res) {
-  const {
-    id,
-    routingGuid,
-    registrationId,
-    registrationNumber,
-    registrationDate,
-    renewalDate,
-    circulationPeriod,
-    manufacturerCountry,
-    tradeName,
-    internationalName,
-    data,
-  } = req.body;
+/* INFECTIONS */
+
+app.get("/GetInfectionsList", async function (req, res) {
+  const params = {
+    TableName: INFECTIONS_TABLE,
+    Select: "ALL_ATTRIBUTES",
+  };
+
+  try {
+    const { Items } = await dynamoDbClient.scan(params).promise();
+    if (Items) {
+      res.json(Items);
+    } else {
+      res.status(404).json({ error: "Could retrive all Items" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: `Error while retriving all Items: \n${error}` });
+  }
+});
+
+app.post("/UpsertInfection", async function (req, res) {
+  const { id } = req.body;
   if (typeof id !== "string") {
     res.status(400).json({ error: '"id" must be a string' });
-  } else if (typeof routingGuid !== "string") {
-    res.status(400).json({ error: '"routingGuid" must be a string' });
   }
 
   const params = {
-    TableName: VACCINES_TABLE,
+    TableName: INFECTIONS_TABLE,
     Item: {
-      id,
-      routingGuid,
-      registrationId,
-      registrationNumber,
-      registrationDate,
-      renewalDate,
-      circulationPeriod,
-      manufacturerCountry,
-      tradeName,
-      internationalName,
-      data,
+      ...req.body,
+      updateDate: Date.now(),
+    },
+  };
+
+  try {
+    await dynamoDbClient.put(params).promise();
+    res.json(params.Item);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Could not create vaccine" });
+  }
+});
+
+/* RESTRICTIONS */
+
+app.get("/GetRestrictionsList", async function (req, res) {
+  const params = {
+    TableName: RESTRICTIONS_TABLE,
+    Select: "ALL_ATTRIBUTES",
+  };
+
+  try {
+    const { Items } = await dynamoDbClient.scan(params).promise();
+    if (Items) {
+      res.json(Items);
+    } else {
+      res.status(404).json({ error: "Could retrive all Items" });
+    }
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: `Error while retriving all Items: \n${error}` });
+  }
+});
+
+app.post("/UpsertRestriction", async function (req, res) {
+  const { id, routingGuid } = req.body;
+  if (typeof id !== "string") {
+    res.status(400).json({ error: '"id" must be a string' });
+  }
+
+  const params = {
+    TableName: RESTRICTIONS_TABLE,
+    Item: {
+      ...req.body,
       updateDate: Date.now(),
     },
   };

@@ -5,8 +5,9 @@ service: vaccination-handbook-api-app
 frameworkVersion: "2"
 
 custom:
-  tableName: "users-table-${self:provider.stage}"
   vaccinesTableName: "vaccines-table-${self:provider.stage}"
+  infectionsTableName: "infections-table-${self:provider.stage}"
+  restrictionsTableName: "restrictions-table-${self:provider.stage}"
 
 provider:
   name: aws
@@ -26,9 +27,12 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [VaccinesTable, Arn]
+            - Fn::GetAtt: [InfectionsTable, Arn]
+            - Fn::GetAtt: [RestrictionsTable, Arn]
   environment:
-    USERS_TABLE: ${self:custom.tableName}
     VACCINES_TABLE: ${self:custom.vaccinesTableName}
+    INFECTIONS_TABLE: ${self:custom.infectionsTableName}
+    RESTRICTIONS_TABLE: ${self:custom.restrictionsTableName}
 
 functions:
   api:
@@ -43,19 +47,6 @@ functions:
 
 resources:
   Resources:
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: userId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:custom.tableName}
     VaccinesTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -69,3 +60,29 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.vaccinesTableName}
+    InfectionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.infectionsTableName}
+    RestrictionsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.restrictionsTableName}

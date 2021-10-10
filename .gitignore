@@ -1,0 +1,5 @@
+node_modules
+.serverless
+serverless-api/node_modules
+serverless-api/.serverless
+scraper
