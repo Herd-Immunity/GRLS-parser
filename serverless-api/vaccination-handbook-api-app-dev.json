@@ -1,0 +1,72 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Some example API",
+    "version" : "2021-11-28T19:58:05Z",
+    "title" : "dev-vaccination-handbook-api-app",
+    "termsOfService" : "https://www.google.com",
+    "contact" : {
+      "name" : "The contact person",
+      "url" : "https://www.serverless.com/framework",
+      "email" : "some-fake@email.com"
+    },
+    "license" : {
+      "name" : "The license",
+      "url" : "https://www.github.com"
+    }
+  },
+  "host" : "4vw5xzykw9.execute-api.us-east-1.amazonaws.com",
+  "basePath" : "/dev",
+  "tags" : [ {
+    "name" : "Vaccines",
+    "description" : "The first tag"
+  }, {
+    "name" : "Tag2",
+    "description" : "That other tag that we all love"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/" : {
+      "x-amazon-apigateway-any-method" : {
+        "responses" : { }
+      }
+    },
+    "/GetVaccinesList" : {
+      "get" : {
+        "tags" : [ "Vaccines" ],
+        "summary" : "Gets a simple message",
+        "description" : "Get complete list of id vaccines\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/MessageResponse"
+            }
+          }
+        }
+      }
+    },
+    "/{proxy+}" : {
+      "x-amazon-apigateway-any-method" : {
+        "parameters" : [ {
+          "name" : "proxy",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : { }
+      }
+    }
+  },
+  "definitions" : {
+    "MessageResponse" : {
+      "type" : "object",
+      "properties" : {
+        "message" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

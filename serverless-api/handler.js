@@ -6,7 +6,7 @@ const app = express();
 
 const VACCINES_TABLE = process.env.VACCINES_TABLE;
 const INFECTIONS_TABLE = process.env.INFECTIONS_TABLE;
-const RESTRICTIONS_TABLE = process.env.RESTRICTIONS_TABLE;
+const CONTRAINDICATIONS_TABLE = process.env.CONTRAINDICATIONS_TABLE;
 
 const dynamoDbClient = new AWS.DynamoDB.DocumentClient();
 
@@ -131,11 +131,11 @@ app.post("/UpsertInfection", async function (req, res) {
   }
 });
 
-/* RESTRICTIONS */
+/* CONTRAINDICATIONS */
 
-app.get("/GetRestrictionsList", async function (req, res) {
+app.get("/GetContraindicationsList", async function (req, res) {
   const params = {
-    TableName: RESTRICTIONS_TABLE,
+    TableName: CONTRAINDICATIONS_TABLE,
     Select: "ALL_ATTRIBUTES",
   };
 
@@ -154,14 +154,14 @@ app.get("/GetRestrictionsList", async function (req, res) {
   }
 });
 
-app.post("/UpsertRestriction", async function (req, res) {
+app.post("/UpsertContraindication", async function (req, res) {
   const { id, routingGuid } = req.body;
   if (typeof id !== "string") {
     res.status(400).json({ error: '"id" must be a string' });
   }
 
   const params = {
-    TableName: RESTRICTIONS_TABLE,
+    TableName: CONTRAINDICATIONS_TABLE,
     Item: {
       ...req.body,
       updateDate: Date.now(),
@@ -173,11 +173,11 @@ app.post("/UpsertRestriction", async function (req, res) {
     res.json(params.Item);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Could not create vaccine" });
+    res.status(500).json({ error: `Could not create vaccine\n${error}` });
   }
 });
 
-app.use((req, res, next) => {
+app.use((_req, res) => {
   return res.status(404).json({
     error: "Not Found",
   });

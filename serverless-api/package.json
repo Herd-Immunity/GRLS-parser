@@ -5,5 +5,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "serverless-http": "^2.7.0"
+  },
+  "devDependencies": {
+    "serverless-aws-documentation": "^1.1.0"
   }
 }
