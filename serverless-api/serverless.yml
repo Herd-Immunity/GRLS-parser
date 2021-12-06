@@ -30,48 +30,145 @@ custom:
           url: https://www.github.com
       tags:
         - name: Vaccines
-          description: The first tag
-        - name: Tag2
-          description: That other tag that we all love
-    # Now we describe all the models that we use
+          description: A vaccine is a biological preparation that provides active acquired immunity to a particular infectious disease
+        - name: Infections
+          description: An infection is the invasion of an organism's body tissues by disease-causing agents, their multiplication, and the reaction of host tissues to the infectious agents and the toxins they produce
+        - name: Contraindications
+          description: A contraindication is a condition that serves as a reason not to take a certain medical treatment due to the harm that it would cause the patient
     models:
-      - name: MessageResponse
-        contentType: "application/json"
-        schema:
-          type: object
-          properties:
-            message:
-              type: string
-      - name: DoSomethingRequest
+      - name: Vaccines
         contentType: "application/json"
         schema:
           type: array
           items:
-            type: string
-      - name: DoSomethingResponse
+            type: object
+            properties:
+              id:
+                type: string
+                example: plague_molecular_lyo_RPN
+              routingGuid:
+                type: string
+                example: 0358c243-78a1-4df6-8df2-bcef660d17f3
+              internationalName:
+                type: string
+                example: Вакцина для профилактики чумы
+      - name: Vaccine
         contentType: "application/json"
         schema:
           type: object
           properties:
-            result:
-              type: string
-            submittedItems:
+            updateDate:
               type: number
-      - name: 400JsonResponse
+              example: 1630273105398
+            registrationDate:
+              type: string
+              example: 19.04.2018
+            data:
+              type: string
+              example: Sources:[SourceName:GRLSSourceUrl:InstrImgHackInstructions:[Images:[Url:\\InstrImg\\0001440222\\ЛП-004808[2018]_0.pdfLabel:Изм. № 0 ЛП-004808 2018]FolderPath:nullLabel:ЛП-004808 2018]]
+            tradeName:
+              type: string
+              example: Вакцина чумная молекулярная микроинкапсулированная (ВЧММ)
+            circulationPeriod:
+              type: string
+              example: 5 лет
+            internationalName:
+              type: string
+              example: Вакцина для профилактики чумы
+            id:
+              type: string
+              example: plague_molecular_lyo_RPN
+            registrationNumber:
+              type: string
+              example: ЛП-004808
+            registrationId:
+              type: string
+              example: 1440222
+            routingGuid:
+              type: string
+              example: 0358c243-78a1-4df6-8df2-bcef660d17f3
+            manufacturerCountry:
+              type: string
+              example: Россия
+      - name: Infection
         contentType: "application/json"
         schema:
           type: object
           properties:
-            message:
+            id:
               type: string
-            statusCode:
+              example: inf1
+            name:
+              type: string
+              example: чума
+            updateDate:
               type: number
+              example: 1630273105398
+      - name: Infections
+        contentType: "application/json"
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: inf1
+              name:
+                type: string
+                example: чума
+              updateDate:
+                type: number
+                example: 1630273105398
+      - name: Contraindication
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            id:
+              type: string
+              example: inf1
+            text:
+              type: string
+              example: чума
+            frequency:
+              type: string
+              example: очень часто
+            updateDate:
+              type: number
+              example: 1630273105398
+      - name: Contraindications
+        contentType: "application/json"
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: inf1
+              text:
+                type: string
+                example: чума
+              frequency:
+                type: string
+                example: очень часто
+              updateDate:
+                type: number
+                example: 1630273105398
+      - name: 500JsonResponse
+        contentType: "application/json"
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
   commonModelSchemaFragments:
     # defining common fragments means you can reference them with a single line
-    MethodResponse400Json:
-      statusCode: "400"
+    MethodResponse500Json:
+      statusCode: "500"
       responseModels:
-        "application/json": 400JsonResponse
+        "application/json": 500JsonResponse
 
 provider:
   name: aws
@@ -103,26 +200,100 @@ functions:
     handler: handler.handler
     events:
       - http:
+          path: /GetVaccinesList
+          method: get
+          documentation:
+            summary: Gets all avaliable vaccines
+            tags:
+              - Vaccines
+            description: >
+              Get complete list of vaccines
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Vaccines
+      - http:
+          path: /UpsertVaccine
+          method: post
+          documentation:
+            summary: Update existing by id or create new
+            tags:
+              - Vaccines
+            requestModels:
+              "application/json": Vaccine
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Vaccine
+      - http:
+          path: /GetVaccineById/*
+          method: get
+          documentation:
+            summary: Gets all avaliable data of vaccine by ID
+            tags:
+              - Vaccines
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Vaccines
+      - http:
+          path: /GetInfectionsList
+          method: get
+          documentation:
+            summary: Gets all avaliable infections
+            tags:
+              - Infections
+            description: >
+              Get complete list of infections
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Infections
+      - http:
+          path: /UpsertInfection
+          method: post
+          documentation:
+            summary: Update existing by id or create new
+            tags:
+              - Infections
+            requestModels:
+              "application/json": Infection
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Infection
+      - http:
+          path: /GetContraindicationsList
+          method: get
+          documentation:
+            summary: Gets all avaliable сontraindications
+            tags:
+              - Contraindications
+            description: >
+              Get complete list of сontraindications
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Contraindications
+      - http:
+          path: /UpsertContraindication
+          method: post
+          documentation:
+            summary: Update existing by id or create new
+            tags:
+              - Contraindications
+            requestModels:
+              "application/json": Contraindication
+            methodResponses:
+              - statusCode: "200"
+                responseModels:
+                  "application/json": Contraindication
+      - http:
           path: /
           method: ANY
       - http:
           path: /{proxy+}
           method: ANY
-
-      # - http:
-      #     path: /GetVaccinesList
-      #     method: get
-      #     documentation:
-      #       summary: Gets a simple message
-      #       tags:
-      #         - Vaccines
-      #       description: >
-      #         Get complete list of id vaccines
-      #       methodResponses:
-      #         - statusCode: "200"
-      #           responseModels:
-      #             "application/json": MessageResponse
-
 resources:
   Resources:
     VaccinesTable:

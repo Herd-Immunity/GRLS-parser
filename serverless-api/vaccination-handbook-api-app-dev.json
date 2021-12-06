@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Some example API",
-    "version" : "2021-11-28T19:58:05Z",
+    "version" : "2021-12-06T17:28:56Z",
     "title" : "dev-vaccination-handbook-api-app",
     "termsOfService" : "https://www.google.com",
     "contact" : {
@@ -33,9 +33,6 @@
     },
     "/GetVaccinesList" : {
       "get" : {
-        "tags" : [ "Vaccines" ],
-        "summary" : "Gets a simple message",
-        "description" : "Get complete list of id vaccines\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {

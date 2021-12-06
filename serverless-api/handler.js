@@ -17,7 +17,7 @@ app.use(express.json());
 app.get("/GetVaccinesList", async function (req, res) {
   const params = {
     TableName: VACCINES_TABLE,
-    AttributesToGet: ["id", "routingGuid"],
+    AttributesToGet: ["id", "routingGuid", "internationalName"],
     Select: "SPECIFIC_ATTRIBUTES",
     ReturnConsumedCapacity: "TOTAL",
   };
