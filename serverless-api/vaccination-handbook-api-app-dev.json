@@ -2,7 +2,7 @@
   "swagger" : "2.0",
   "info" : {
     "description" : "Some example API",
-    "version" : "2021-12-06T17:28:56Z",
+    "version" : "2021-12-08T21:45:47Z",
     "title" : "dev-vaccination-handbook-api-app",
     "termsOfService" : "https://www.google.com",
     "contact" : {
@@ -19,49 +19,279 @@
   "basePath" : "/dev",
   "tags" : [ {
     "name" : "Vaccines",
-    "description" : "The first tag"
+    "description" : "A vaccine is a biological preparation that provides active acquired immunity to a particular infectious disease"
   }, {
-    "name" : "Tag2",
-    "description" : "That other tag that we all love"
+    "name" : "Infections",
+    "description" : "An infection is the invasion of an organism's body tissues by disease-causing agents, their multiplication, and the reaction of host tissues to the infectious agents and the toxins they produce"
+  }, {
+    "name" : "Contraindications",
+    "description" : "A contraindication is a condition that serves as a reason not to take a certain medical treatment due to the harm that it would cause the patient"
   } ],
   "schemes" : [ "https" ],
   "paths" : {
-    "/" : {
-      "x-amazon-apigateway-any-method" : {
-        "responses" : { }
-      }
-    },
-    "/GetVaccinesList" : {
+    "/GetContraindicationsList" : {
       "get" : {
+        "tags" : [ "Contraindications" ],
+        "summary" : "Gets all avaliable сontraindications",
+        "description" : "Get complete list of сontraindications\n",
         "produces" : [ "application/json" ],
         "responses" : {
           "200" : {
             "description" : "200 response",
             "schema" : {
-              "$ref" : "#/definitions/MessageResponse"
+              "$ref" : "#/definitions/Contraindications"
             }
           }
         }
       }
     },
-    "/{proxy+}" : {
-      "x-amazon-apigateway-any-method" : {
+    "/GetInfectionsList" : {
+      "get" : {
+        "tags" : [ "Infections" ],
+        "summary" : "Gets all avaliable infections",
+        "description" : "Get complete list of infections\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Infections"
+            }
+          }
+        }
+      }
+    },
+    "/GetVaccineById/{id}" : {
+      "get" : {
+        "tags" : [ "Vaccines" ],
+        "summary" : "Gets all avaliable data of vaccine by ID",
+        "produces" : [ "application/json" ],
         "parameters" : [ {
-          "name" : "proxy",
+          "name" : "id",
           "in" : "path",
           "required" : true,
           "type" : "string"
         } ],
-        "responses" : { }
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Vaccines"
+            }
+          }
+        }
+      }
+    },
+    "/GetVaccinesList" : {
+      "get" : {
+        "tags" : [ "Vaccines" ],
+        "summary" : "Gets all avaliable vaccines",
+        "description" : "Get complete list of vaccines\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Vaccines"
+            }
+          }
+        }
+      }
+    },
+    "/UpsertContraindication" : {
+      "post" : {
+        "tags" : [ "Contraindications" ],
+        "summary" : "Update existing by id or create new",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Contraindication",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Contraindication"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Contraindication"
+            }
+          }
+        }
+      }
+    },
+    "/UpsertInfection" : {
+      "post" : {
+        "tags" : [ "Infections" ],
+        "summary" : "Update existing by id or create new",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Infection",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Infection"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Infection"
+            }
+          }
+        }
+      }
+    },
+    "/UpsertVaccine" : {
+      "post" : {
+        "tags" : [ "Vaccines" ],
+        "summary" : "Update existing by id or create new",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "Vaccine",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Vaccine"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Vaccine"
+            }
+          }
+        }
       }
     }
   },
   "definitions" : {
-    "MessageResponse" : {
+    "Infection" : {
       "type" : "object",
       "properties" : {
-        "message" : {
+        "updateDate" : {
+          "type" : "number"
+        },
+        "name" : {
           "type" : "string"
+        },
+        "id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Contraindication" : {
+      "type" : "object",
+      "properties" : {
+        "updateDate" : {
+          "type" : "number"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "text" : {
+          "type" : "string"
+        },
+        "frequency" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Infections" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "properties" : {
+          "updateDate" : {
+            "type" : "number"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "Vaccine" : {
+      "type" : "object",
+      "properties" : {
+        "routingGuid" : {
+          "type" : "string"
+        },
+        "updateDate" : {
+          "type" : "number"
+        },
+        "tradeName" : {
+          "type" : "string"
+        },
+        "circulationPeriod" : {
+          "type" : "string"
+        },
+        "data" : {
+          "type" : "string"
+        },
+        "registrationNumber" : {
+          "type" : "string"
+        },
+        "registrationDate" : {
+          "type" : "string"
+        },
+        "internationalName" : {
+          "type" : "string"
+        },
+        "registrationId" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "manufacturerCountry" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Vaccines" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "properties" : {
+          "routingGuid" : {
+            "type" : "string"
+          },
+          "internationalName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "Contraindications" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "properties" : {
+          "updateDate" : {
+            "type" : "number"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "frequency" : {
+            "type" : "string"
+          }
         }
       }
     }

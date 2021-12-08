@@ -45,13 +45,13 @@ custom:
             properties:
               id:
                 type: string
-                example: plague_molecular_lyo_RPN
+                # example: plague_molecular_lyo_RPN
               routingGuid:
                 type: string
-                example: 0358c243-78a1-4df6-8df2-bcef660d17f3
+                # example: 0358c243-78a1-4df6-8df2-bcef660d17f3
               internationalName:
                 type: string
-                example: Вакцина для профилактики чумы
+                # example: Вакцина для профилактики чумы
       - name: Vaccine
         contentType: "application/json"
         schema:
@@ -59,37 +59,37 @@ custom:
           properties:
             updateDate:
               type: number
-              example: 1630273105398
+              # example: 1630273105398
             registrationDate:
               type: string
-              example: 19.04.2018
+              # example: 19.04.2018
             data:
               type: string
-              example: Sources:[SourceName:GRLSSourceUrl:InstrImgHackInstructions:[Images:[Url:\\InstrImg\\0001440222\\ЛП-004808[2018]_0.pdfLabel:Изм. № 0 ЛП-004808 2018]FolderPath:nullLabel:ЛП-004808 2018]]
+              # example: Sources:[SourceName:GRLSSourceUrl:InstrImgHackInstructions:[Images:[Url:\\InstrImg\\0001440222\\ЛП-004808[2018]_0.pdfLabel:Изм. № 0 ЛП-004808 2018]FolderPath:nullLabel:ЛП-004808 2018]]
             tradeName:
               type: string
-              example: Вакцина чумная молекулярная микроинкапсулированная (ВЧММ)
+              # example: Вакцина чумная молекулярная микроинкапсулированная (ВЧММ)
             circulationPeriod:
               type: string
-              example: 5 лет
+              # example: 5 лет
             internationalName:
               type: string
-              example: Вакцина для профилактики чумы
+              # example: Вакцина для профилактики чумы
             id:
               type: string
-              example: plague_molecular_lyo_RPN
+              # example: plague_molecular_lyo_RPN
             registrationNumber:
               type: string
-              example: ЛП-004808
+              # example: ЛП-004808
             registrationId:
               type: string
-              example: 1440222
+              # example: 1440222
             routingGuid:
               type: string
-              example: 0358c243-78a1-4df6-8df2-bcef660d17f3
+              # example: 0358c243-78a1-4df6-8df2-bcef660d17f3
             manufacturerCountry:
               type: string
-              example: Россия
+              # example: Россия
       - name: Infection
         contentType: "application/json"
         schema:
@@ -97,13 +97,13 @@ custom:
           properties:
             id:
               type: string
-              example: inf1
+              # example: inf1
             name:
               type: string
-              example: чума
+              # example: чума
             updateDate:
               type: number
-              example: 1630273105398
+              # example: 1630273105398
       - name: Infections
         contentType: "application/json"
         schema:
@@ -113,13 +113,13 @@ custom:
             properties:
               id:
                 type: string
-                example: inf1
+                # example: inf1
               name:
                 type: string
-                example: чума
+                # example: чума
               updateDate:
                 type: number
-                example: 1630273105398
+                # example: 1630273105398
       - name: Contraindication
         contentType: "application/json"
         schema:
@@ -127,16 +127,16 @@ custom:
           properties:
             id:
               type: string
-              example: inf1
+              # example: inf1
             text:
               type: string
-              example: чума
+              # example: чума
             frequency:
               type: string
-              example: очень часто
+              # example: очень часто
             updateDate:
               type: number
-              example: 1630273105398
+              # example: 1630273105398
       - name: Contraindications
         contentType: "application/json"
         schema:
@@ -146,16 +146,16 @@ custom:
             properties:
               id:
                 type: string
-                example: inf1
+                # example: inf1
               text:
                 type: string
-                example: чума
+                # example: чума
               frequency:
                 type: string
-                example: очень часто
+                # example: очень часто
               updateDate:
                 type: number
-                example: 1630273105398
+                # example: 1630273105398
       - name: 500JsonResponse
         contentType: "application/json"
         schema:
@@ -215,6 +215,9 @@ functions:
       - http:
           path: /UpsertVaccine
           method: post
+          request:
+            parameters:
+              application/json: Vaccine
           documentation:
             summary: Update existing by id or create new
             tags:
@@ -226,7 +229,7 @@ functions:
                 responseModels:
                   "application/json": Vaccine
       - http:
-          path: /GetVaccineById/*
+          path: /GetVaccineById/{id}
           method: get
           documentation:
             summary: Gets all avaliable data of vaccine by ID
@@ -288,12 +291,12 @@ functions:
               - statusCode: "200"
                 responseModels:
                   "application/json": Contraindication
-      - http:
-          path: /
-          method: ANY
-      - http:
-          path: /{proxy+}
-          method: ANY
+      # - http:
+      #     path: /
+      #     method: ANY
+      # - http:
+      #     path: /{proxy+}
+      #     method: ANY
 resources:
   Resources:
     VaccinesTable:
